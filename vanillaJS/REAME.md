@@ -20,3 +20,10 @@ element.propertyName.includes('flex') //flex속성을 가진 엘리먼트
 ```javascript
 element.classList.toggle('open') //open클래스 Toggle
 ```
+
+---
+
+.filter() : 콜백함수의 조건에 해당하는 배열을 생성하는 기능   
+```javascript
+var newArray = arr.filter(callbackFunc(element, index, array), thisArg);
+```
