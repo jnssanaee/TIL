@@ -92,3 +92,31 @@ animals.slice(2); // ["camel", "duck", "elephant"]
 
 animals.slice(2, 4); // ["camel", "duck"]
 ```
+
+--- 
+
+String.prototype.substr() : 특정 위치에서 length 만큼 문자 반환
+> length 미선언 시 끝까지 반환
+
+```javascript
+//구문
+str.substr(start[, length])
+
+//예제
+var str = 'Mozilla';
+
+str.substr(1, 2); // "oz"
+```
+
+---
+
+Math.ceil() : 주어진 숫자보다 크거나 같은 숫자 중 가장 작은 정수 반환
+
+```javascript
+//구문
+Math.ceil(x)
+
+//예제
+Math.ceil(.95); // 1
+Math.ceil(-7.004); // -7
+```
