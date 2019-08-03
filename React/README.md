@@ -55,7 +55,7 @@
 상태값이 변경되는 과정은 아래와 같다. 
 ![image info](../images/react_redux.png)  
   
-1. **액션**  
+1. **액션(action)**  
    액션은 type속성값을 가진 자바스크립트 객체다. dispatch 메서드에 넣어 호출 시  
    리덕스는 위 그림의 과정을 수행한다. 
    액션 객체는 type 속성외 다른 원하는 속성값도 넣을 수 있다.
@@ -70,9 +70,10 @@
     store.dispatch({ type: 'todo/REMOVE' })
     ```
 
-2. **리듀서**  
-   리듀서는 액션이 발생했을 때 새로운 상태값을 만드는 함수다.
-   작성 예는 아래와 같다.
+2. **리듀서(reducer)**  
+* 현재상태와 액션객체를 받아 새로운 상태를 반환한다.
+* 리듀서는 액션이 발생했을 때 새로운 상태값을 만드는 함수다.
+* 작성 예
    ```javascript
    function reducer(state = INIT_STATE, action) {
        switch (action.type) {
@@ -115,3 +116,91 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
 ### Hook 2가지 원칙
 * 최상위에서만 Hook 호출. 반복문, 조건문, 중첩된 함수 내에서 실행 X
 * 리액트 함수 컴포넌트 내에서만 Hook 호출. (custom Hook내에선 가능)
+
+### Context API
+* 전역적으로 사용할 수 있는 값을 관리할 수 있다. (값은 함수, 라이브러리 인스턴스, DOM일 수도 있다.)
+* createContext의 파라미터는 Context의 기본값을 설정할 수 있다.
+    ```javascript
+    const UserDispatch = React.createContext(null);
+    ```
+* 앱 제작 시 state를 위한 Context, dispatch를 위한 Context를 따로 생성하는 게 최적화에 좋다.
+
+### useRef
+* DOM 접근 시 사용하는 Hook
+* 사용 예
+    ```javascript
+    // useRef 호출
+    import React, { useState, useRef } from 'react';
+
+    // 객체 선언
+    const nameInput = useRef();
+
+    // 선택하고 싶은 DOM에 선언
+    <input ref={nameInput} />
+
+    // DOM 접근 및 이벤트
+    nameInput.current.focus()
+    ```
+
+### useState
+정리하자
+
+### useReducer (reducer는 '상태를 업데이트 하는 함수')
+* '액션'이라는 객체를 기반으로 상태를 업데이트한다. (액션객체란 업데이트할 때 참조하는 객체)
+* 상태 업데이트 로직을 컴포넌트 밖으로 분리 가능 (다른 파일에서 작성 후 불러와서도 사용 가능)
+* 사용 예
+    ```javascript
+    // useReducer 호출
+    import React, { useReducer } from 'react';
+
+    // 리듀서 함수 생성 (상태업데이트 로직이 컴포넌트 밖에 있다.)
+    fucntion reducer(state, action) {
+        switch (action.type) {
+            case 'INCEREMENT': 
+                return state + 1;
+            case 'DECEREMENT': 
+                return state - 1;
+            default:
+                return state;
+       }
+    }
+
+    // 리듀서 사용
+    function Counter() {
+        const [number, dispatch] = useReducer(reducer, 0);
+        //const [현재상태, 액션을 발생시키는 함수] = useReducer(리듀서 함수, 초기값);
+
+        const onIncrease = () => {
+            dispatch({
+                type: 'INCEREMENT'
+            })
+        }
+
+        const onDecrease = () => {
+            dispatch({
+                type: 'DECEREMENT'
+            })
+        }
+    }
+
+    //컴포넌트에 선언
+    return (
+        <>
+            <h1>{number}</h1>
+            <button onClick={onIncrease}+1</button>
+            <button onClick={onDecrease}-1</button>
+        </>
+    )
+    ```
+
+
+### customHook
+정리하자 (쉽게사용하기 위함?)
+
+### dispatch 
+정리하자
+
+## React 최상위 API
+
+### React.memo
+정리하자
