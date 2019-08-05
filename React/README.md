@@ -73,6 +73,27 @@ function Wrapper({children}){
 
 ```
 
+### 조건부 랜더링
+```javascript
+//App.js
+<Hello isSpecial={true} />
+
+//Hello.js
+Hello() {
+    return (
+        <div>
+            {isSpecial ? <b>하다</b> : <b>안하다<b>} // 삼항연산자
+            {isSpecial && <b>*</b>} // &연산자 (단순히 true, false로 처리할 경우)
+        </div>
+    )
+}
+
+//출력화면
+하다
+*
+
+```
+
 <br>
 --- 
 <br>
