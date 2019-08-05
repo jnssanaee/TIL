@@ -17,6 +17,66 @@
 ### 컴포넌트
 * input, select, textarea와 같이 state를 거쳐 보여주는 값이 반영되는 컴포넌트를 Controlled Component라 부른다.
 
+### props
+```javascript
+//App.js
+<Hello name="react" color="red" />
+
+
+//Hello.js
+function Hello(props){
+    console.log(props); // {name: "react"}, 부모 컴포넌트에 선언한 속성 및 값이 객체형태로 들어있다.
+    return <div style={{color: props.color}}>안녕하세요 {props.name}</div> // 중괄호가 2번인 이유는 자바스크립트 값이기 때문
+}
+
+//Hello.js (구조분해 할당으로 선언 시)
+function Hello({ name, color }){
+    return <div style={{color: color}}>안녕하세요 {name}</div>
+                    // color 라고만 선언해도 됨
+}
+
+//출력화면
+안녕하세요 react (빨간색 컬러)
+
+
+/* 기본값(defaultProps)으로 선언하고 싶을 경우 */
+//App.js
+<Hello />
+
+//Hello.js
+Hello.defaultProps = {
+    name: '이름없음'
+}
+
+//출력화면
+이름없음
+
+
+/* 컴포넌트 태그 사이 값(children)을 조회하고 싶을 경우 */
+//App.js
+function App(){
+    return (
+        <Wrapper>
+            <Hello color="pink" />
+        </Wrapper>
+    )
+}
+
+//Wrapper.js
+function Wrapper({children}){
+    return (
+        <div>
+            {children}
+        </div>
+    )
+}
+
+```
+
+<br>
+--- 
+<br>
+
 ## Redux
 리덕스(redux)는 자바스크립트를 위한 상태 관리 프레임워크이다.
 
@@ -97,6 +157,7 @@
    스토어는 리덕스의 상태값을 갖는 객체다. 액션의 발생은 스토어의 dispatch 메서드로 시작된다.  
    스토어는 액션이 발생하면 미들웨어 함수를 실행하고, 리듀서를 실행해서 상태값을 새로운 값으로 변경한다.  
    그리고 사전에 등록된 모든 이벤트 처리 함수에게 액션의 처리가 끝났음을 알린다.  
+
 <br>
 --- 
 <br>
@@ -211,6 +272,10 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
 
 ### dispatch 
 정리하자
+
+<br>
+--- 
+<br>
 
 ## React 최상위 API
 
