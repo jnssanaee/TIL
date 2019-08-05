@@ -192,7 +192,19 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
         </>
     )
     ```
+### useCallback (함수를 재사용 시 사용하는 Hook)
+* 사용 예
+    ```javascript
+    // useCallback 호출
+    import React, { useCallback } from 'react';
 
+    // useCallback 선언 (기존함수를 userCallback으로 감싼다.)
+    const onRemove = userCallback(id => {
+        setUsers(users.filter(user => user.id ! == id));
+    }, [users]) 
+    // users가 바뀔 때만 함수가 생성됨
+    // 두번째 인자는 꼭 선언! 미선언 시 최신상태가 아닌 초기랜더링 시 상태를 참조한다.
+    ```
 
 ### customHook
 정리하자 (쉽게사용하기 위함?)
@@ -202,5 +214,15 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
 
 ## React 최상위 API
 
-### React.memo
-정리하자
+### React.memo (컴포넌트의 리랜더링 성능을 최적화할 수 있다.)
+    ```javascript
+    // React.memo 선언
+    export default React.memo(CreateUser); // props가 바뀐 경우에만 리랜더링 발생!
+    ```
+
+## 기타
+
+### 컴포넌트 리랜더링 확인 방법
+* React Developer Tools 설치  (크롬 확장도구)
+* 개발자도구 - react 탭 - 톱니바퀴 - 'Highlight Updates' 체크
+![image info](../images/react_hightlight.gif)  
