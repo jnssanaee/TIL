@@ -76,13 +76,13 @@ function Wrapper({children}){
 ### 조건부 랜더링
 ```javascript
 //App.js
-<Hello isSpecial={true} />
+<Hello isSpecial={true} /> // isSpecial만 선언해도 true로 간주
 
 //Hello.js
 Hello() {
     return (
         <div>
-            {isSpecial ? <b>하다</b> : <b>안하다<b>} // 삼항연산자
+            {isSpecial ? <b>하다</b> : <b>안하다<b>} // 삼항연산자 (서로 내용이 다를 경우)
             {isSpecial && <b>*</b>} // &연산자 (단순히 true, false로 처리할 경우)
         </div>
     )
@@ -93,6 +93,65 @@ Hello() {
 *
 
 ```
+
+### input 상태 관리
+```javascript
+//input.js
+function input() {
+    const [text, setText] = useState('');
+
+    const onChange = (e) => { // e는 이벤트 객체
+        console.log(e.target) // e.target은 이벤트가 발생한 input의 정보를 가지고 있다.
+        console.log(e.target.value) // e.target.value는 input의 value 값
+
+        setText(e.target.value)
+    };
+
+    const onReset = () => {
+        setText('');
+    };
+    return (
+        <input onChange={onChange} value={text} /> // value값을 설정해줘야 초기화 시 값이 날아간다.
+        <button onClick={onRest}>초기화</button>
+    )
+}
+```
+
+### 여러 개 input 상태 관리하기
+```javascript
+function input() {
+    const [inputs, setInputs] = useState({ // 객체형태의 값을 관리
+        name: '',
+        nickname: ''
+    });
+    const { name, nickname } = inputs; // 비구조 할당을 통해 추출
+
+    const onChange = (e) => {
+        const { name, value } = e.target; // 이벤트 발생의 name, value 추출
+        setInputs({ // 리액트에서 객체 업데이트 시 기존 상태 복사 후 새로운 값을 덮어씌우고 새로운 상태로 설정 (이런걸 불변성을 지킨다고 한다.)
+            // 불변성을 지켜줘야만 리액트에서 상태가 변경되었음을 감지할 수 있고, 이에 따라 필요한 렌더링이 발생하게 된다. 
+            ...inputs, // spread연산자로 객체 그대로 복사해온다.
+            [name]: value // 대괄호로 감쌀 시 name값이 무엇을 가르키냐에 따라 다른 key값이 변경됨, 없을 시 name 문자열 그대로 받아옴
+        })
+    };
+
+    const onReset = () => {
+        setInputs({
+            name: '',
+            nickname: ''
+        })
+    };
+    return (
+        <input name="name" placeholder="이름" onChange={onChange} value={name} />  //value는 inputs로 추출한 값
+        <input name="nickname" placeholder="닉네임 " onChange={onChange} value={nickname} /> 
+        <button onClick={onRest}>초기화</button>
+        <div>
+            {name} {nickname}
+        </div>
+    )
+}
+
+``` 
 
 <br>
 --- 
@@ -212,7 +271,7 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
 * 사용 예
     ```javascript
     // useRef 호출
-    import React, { useState, useRef } from 'react';
+    import React, { useRef } from 'react';
 
     // 객체 선언
     const nameInput = useRef();
@@ -224,8 +283,30 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
     nameInput.current.focus()
     ```
 
-### useState
-정리하자
+### useState (함수형 컴포넌트에서 상태를 관리할 수 있는 Hook)
+* 사용 예
+    ```javascript
+    // useState 호출
+    import React, { useState } from 'react';
+
+    // useState 선언
+    const [number, setNumber] = useState(0);
+    // [상태, 상태를 바꿔주는 함수] = useState(상태 초기값);
+
+    // 함수 선언
+    const onIncrease = () => {
+        setNumber(number + 1); // 다음 상태는 선언하는 방식 : '현재 상태를 가져와서 +1 한 값을 넣겠다' 라는 의미
+        setNumber(prevNumber => prevNumber + 1); // updater 함수(함수형 업데이트) 컴포넌트 최적화와 관계있음, 어떻게 업데이트 할 것이다 라는 로직의 함수가 들어갈 수도 있다. prevNumber는 관행상 쓰이는 단어이며, 이전상태를 의미한다.
+    }
+
+    //컴포넌트에 선언
+    return (
+        <>
+            <h1>{number}</h1>
+            <button onClick={onIncrease}+1</button>
+        </>
+    )
+    ```
 
 ### useReducer (reducer는 '상태를 업데이트 하는 함수')
 * '액션'이라는 객체를 기반으로 상태를 업데이트한다. (액션객체란 업데이트할 때 참조하는 객체)
