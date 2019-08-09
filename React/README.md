@@ -117,7 +117,7 @@ function input() {
 }
 ```
 
-### 러 개 input 상태 관리하기
+### 여러 개 input 상태 관리하기
 ```javascript
 function input() {
     const [inputs, setInputs] = useState({ // 객체형태의 값을 관리
@@ -156,54 +156,55 @@ function input() {
 
 ### 배열 항목 추가하기
 ```javascript
-  const onCreate = () => {
-    const user = {
-      id: nextId.current,
-      username,
-      email
-    };
+const onCreate = () => {
+const user = {
+    id: nextId.current,
+    username,
+    email
+};
 
-    setUsers([...users, user]); // spread 연산자를 이용하여 복사하고, 뒤에 추가되는 객체를 붙여 추가하는 방식
-    setUsers(users.concat(user)); // 기존 배열에 concat을 이용한 객체 추가 후 완성된 배열을 set하는 방식
-    // 주의사항 : users.push(user) push를 이용하여 직접 추가 시 업데이트가 안된다.
+// 2가지 방법
+setUsers([...users, user]); // spread 연산자를 이용하여 복사하고, 뒤에 추가되는 객체를 붙여 추가하는 방식
+setUsers(users.concat(user)); // 기존 배열에 concat을 이용한 객체 추가 후 완성된 배열을 set하는 방식
+// 주의사항 : users.push(user) push를 이용하여 직접 추가 시 업데이트가 안된다.
 
-  };
+};
 
 ```
 
 ### 배열 항목 제거하기
 ```javascript
-    // App.js
-    const onRemove = id => {
-        // filter가 user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
-        // = user.id 가 id 인 것을 제거함
-        setUsers(users.filter(user => user.id !== id));
-    };
+// App.js
+const onRemove = id => {
+    // filter가 user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+    // = user.id 가 id 인 것을 제거함
+    setUsers(users.filter(user => user.id !== id));
+};
 
-    // sUserList.js
-    function User({ user, onRemove }) {
-        return (
-            <div>
-                <b>{user.username}</b> <span>({user.email})</span>
-                <button onClick={() => onRemove(user.id)}>삭제</button> 
-                        {/* 
-                            onclick 시 안에 함수를 호출한다는 의미 
-                            이 함수는 id값을 파라미터로 받은 onRemove를 호출한다는 의미
-                            onClick={onRemove(user.id)} 이렇게 선언하면 안됨. 컴포넌트 랜더링 시 호출되버림
-                        */}
-            </div>
-        );
-    }
+// UserList.js
+function User({ user, onRemove }) {
+    return (
+        <div>
+            <b>{user.username}</b> <span>({user.email})</span>
+            <button onClick={() => onRemove(user.id)}>삭제</button> 
+                    {/* 
+                        onclick 시 안에 함수를 호출한다는 의미 
+                        이 함수는 id값을 파라미터로 받은 onRemove를 호출한다는 의미
+                        onClick={onRemove(user.id)} 이렇게 선언하면 안됨. 컴포넌트 랜더링 시 호출되버림
+                    */}
+        </div>
+    );
+}
 
-    function UserList({ users, onRemove }) {
-        return (
-            <div>
-                {users.map(user => (
-                    <User user={user} key={user.id} onRemove={onRemove} />
-                ))}
-            </div>
-        );
-    }
+function UserList({ users, onRemove }) {
+    return (
+        <div>
+            {users.map(user => (
+                <User user={user} key={user.id} onRemove={onRemove} />
+            ))}
+        </div>
+    );
+}
 
 ```
 
