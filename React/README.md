@@ -117,7 +117,7 @@ function input() {
 }
 ```
 
-### 여러 개 input 상태 관리하기
+### 러 개 input 상태 관리하기
 ```javascript
 function input() {
     const [inputs, setInputs] = useState({ // 객체형태의 값을 관리
@@ -132,6 +132,7 @@ function input() {
             // 불변성을 지켜줘야만 리액트에서 상태가 변경되었음을 감지할 수 있고, 이에 따라 필요한 렌더링이 발생하게 된다. 
             ...inputs, // spread연산자로 객체 그대로 복사해온다.
             [name]: value // 대괄호로 감쌀 시 name값이 무엇을 가르키냐에 따라 다른 key값이 변경됨, 없을 시 name 문자열 그대로 받아옴
+                          // 여기서 [name]은 input의 name, nickname을 가리킨다.
         })
     };
 
@@ -153,9 +154,60 @@ function input() {
 
 ``` 
 
-<br>
---- 
-<br>
+### 배열 항목 추가하기
+```javascript
+  const onCreate = () => {
+    const user = {
+      id: nextId.current,
+      username,
+      email
+    };
+
+    setUsers([...users, user]); // spread 연산자를 이용하여 복사하고, 뒤에 추가되는 객체를 붙여 추가하는 방식
+    setUsers(users.concat(user)); // 기존 배열에 concat을 이용한 객체 추가 후 완성된 배열을 set하는 방식
+    // 주의사항 : users.push(user) push를 이용하여 직접 추가 시 업데이트가 안된다.
+
+  };
+
+```
+
+### 배열 항목 제거하기
+```javascript
+    // App.js
+    const onRemove = id => {
+        // filter가 user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+        // = user.id 가 id 인 것을 제거함
+        setUsers(users.filter(user => user.id !== id));
+    };
+
+    // sUserList.js
+    function User({ user, onRemove }) {
+        return (
+            <div>
+                <b>{user.username}</b> <span>({user.email})</span>
+                <button onClick={() => onRemove(user.id)}>삭제</button> 
+                        {/* 
+                            onclick 시 안에 함수를 호출한다는 의미 
+                            이 함수는 id값을 파라미터로 받은 onRemove를 호출한다는 의미
+                            onClick={onRemove(user.id)} 이렇게 선언하면 안됨. 컴포넌트 랜더링 시 호출되버림
+                        */}
+            </div>
+        );
+    }
+
+    function UserList({ users, onRemove }) {
+        return (
+            <div>
+                {users.map(user => (
+                    <User user={user} key={user.id} onRemove={onRemove} />
+                ))}
+            </div>
+        );
+    }
+
+```
+
+<br><br>
 
 ## Redux
 리덕스(redux)는 자바스크립트를 위한 상태 관리 프레임워크이다.
@@ -238,9 +290,7 @@ function input() {
    스토어는 액션이 발생하면 미들웨어 함수를 실행하고, 리듀서를 실행해서 상태값을 새로운 값으로 변경한다.  
    그리고 사전에 등록된 모든 이벤트 처리 함수에게 액션의 처리가 끝났음을 알린다.  
 
-<br>
---- 
-<br>
+<br><br>
 
 ## create-react-app
 * create-react-app은 웹 어플리케이션을 만들기 위한 환경을 제공한다.  
@@ -250,6 +300,8 @@ function input() {
   (src 폴더 바깥에 있는 파일 import 시 실패함)
 * 이미지, 폰트 파일도 src폴더 밑에서 import 해야 브라우저 캐싱 효과를 볼 수 있다.
 * npm run eject 선언 시 숨겨져 있던 내부 설정파일이 노출된다. (바벨, 웹팩 등의 설정을 변경할 수 있다.)
+
+<br><br>
 
 ## Hook  
 Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 수 있게 해주는 함수이다.
@@ -283,7 +335,8 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
     nameInput.current.focus()
     ```
 
-### useState (함수형 컴포넌트에서 상태를 관리할 수 있는 Hook)
+### useState
+* 함수형 컴포넌트에서 상태를 관리할 수 있는 Hook
 * 사용 예
     ```javascript
     // useState 호출
@@ -308,7 +361,8 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
     )
     ```
 
-### useReducer (reducer는 '상태를 업데이트 하는 함수')
+### useReducer
+* reducer는 '상태를 업데이트 하는 함수'
 * '액션'이라는 객체를 기반으로 상태를 업데이트한다. (액션객체란 업데이트할 때 참조하는 객체)
 * 상태 업데이트 로직을 컴포넌트 밖으로 분리 가능 (다른 파일에서 작성 후 불러와서도 사용 가능)
 * 사용 예
@@ -375,17 +429,18 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
 ### dispatch 
 정리하자
 
-<br>
---- 
-<br>
+<br><br>
 
 ## React 최상위 API
 
-### React.memo (컴포넌트의 리랜더링 성능을 최적화할 수 있다.)
+### React.memo
+* 컴포넌트의 리랜더링 성능을 최적화할 수 있다.
     ```javascript
     // React.memo 선언
     export default React.memo(CreateUser); // props가 바뀐 경우에만 리랜더링 발생!
     ```
+
+<br><br>
 
 ## 기타
 
