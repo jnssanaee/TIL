@@ -208,6 +208,33 @@ function UserList({ users, onRemove }) {
 
 ```
 
+### 배열 항목 수정하기
+```javascript
+
+const onToggle = id => {
+    setUsers(
+        users.map(user => // 불변성을 유지하며 배열을 업데이트 할때도 map함수 이용
+            user.id === id ? { ...user, active: !user.active } : user // id값을 비교하여 같으면 active값을 반전
+        )
+    ); 
+};
+
+function User({ user, onRemove, onToggle }) {
+  return (
+    <div>
+      <b
+        style={{
+          cursor: 'pointer',
+          color: user.active ? 'green' : 'black'
+        }}
+        onClick={() => onToggle(user.id)}
+      >
+    </div>
+  );
+}
+
+```
+
 <br><br>
 
 ## Redux
