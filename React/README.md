@@ -437,7 +437,8 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
         </>
     )
     ```
-### useCallback (함수를 재사용 시 사용하는 Hook)
+### useCallback
+* 함수를 재사용 시 사용하는 Hook
 * 사용 예
     ```javascript
     // useCallback 호출
@@ -450,6 +451,19 @@ Hook은 함수 컴포넌트에서 state와 생명주기 기능을 '연동'할 �
     // users가 바뀔 때만 함수가 생성됨
     // 두번째 인자는 꼭 선언! 미선언 시 최신상태가 아닌 초기랜더링 시 상태를 참조한다.
     ```
+
+### useMemo
+* 성능 최적화를 위해 사용하는 Hook, 의존성이 변경됐을때만 다시 계산
+* 사용 예
+    ```javascript
+    // useCallback 호출
+    import React, { useMemo } from 'react';
+
+    // useMemo 선언
+    const count = useMemo(() => countActiveUsers(users), [users]);
+    //첫번째 함수는 users가 바뀔때에만 연산한다. 그렇지 않을 경우 이전에 계산된 값을 사용
+    ```
+
 
 ### customHook
 정리하자 (쉽게사용하기 위함?)
